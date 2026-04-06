@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ektu khoma koro?</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f2ed;
+    --surface: #ffffff;
+    --text: #1a1814;
+    --muted: #6b6760;
+    --hint: #a09d99;
+    --border: #e2ddd7;
+    --yes-bg: #1a1814;
+    --yes-text: #f5f2ed;
+    --no-bg: #ffffff;
+    --no-text: #1a1814;
+    --accent: #3d6b4f;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 999;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3rem 2.5rem 2.5rem;
+    width: 380px;
+    max-width: 92vw;
+    text-align: center;
+    box-shadow: 0 2px 40px rgba(0,0,0,0.07);
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .emoji-area {
+    font-size: 38px;
+    margin-bottom: 1.4rem;
+    display: block;
+    animation: wobble 2.8s ease-in-out infinite;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .headline {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 27px;
+    line-height: 1.35;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+  }
+
+  .subtext {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2.2rem;
+  }
+
+  .btn-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 0;
+    width: 140px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1.5px solid var(--text);
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-yes {
+    background: var(--yes-bg);
+    color: var(--yes-text);
+  }
+
+  .btn-yes:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .btn-no {
+    background: var(--no-bg);
+    color: var(--no-text);
+    position: fixed;
+    width: 140px;
+    z-index: 100;
+  }
+
+  .counter {
+    font-size: 12px;
+    color: var(--hint);
+    margin-top: 1.4rem;
+    min-height: 18px;
+    letter-spacing: 0.02em;
+  }
+
+  .plea-msg {
+    display: none;
+    background: #fdf8f2;
+    border: 1px solid #e8dfd3;
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-top: 1.2rem;
+    text-align: left;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .success-card {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .success-check {
+    width: 54px;
+    height: 54px;
+    background: var(--accent);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
+  }
+
+  .success-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 25px;
+    color: var(--text);
+  }
+
+  .success-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  #no-placeholder {
+    width: 140px;
+    height: 46px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<div class="card" id="main-card">
+  <div id="main-content">
+    <span class="emoji-area">&#x1F97A;</span>
+    <h1 class="headline">Tumi ki amake<br><em>khoma korbe?</em></h1>
+    <p class="subtext">
+      Ami sত্যিই onek sorry.<br>
+      April fool chilo &mdash; tomar sathe kharap<br>
+      korte chai ni, shotti na.
+    </p>
+
+    <div class="btn-container" id="btn-container">
+      <button class="btn btn-yes" id="yes-btn" onclick="handleYes()">Haa, korlam &#10003;</button>
+      <div id="no-placeholder"></div>
+    </div>
+
+    <div class="plea-msg" id="plea-msg">
+      Tumi itogulo baar "na" boleche... ar parchi na.<br>
+      Please ektu bhabo &mdash; ami genuinely sorry. Tumi khoma na korle amar din ta sত্যিই kharap hye jay. &#x1F97A;
+    </div>
+
+    <p class="counter" id="counter"></p>
+  </div>
+
+  <div class="success-card" id="success-card">
+    <div class="success-check">&#10003;</div>
+    <p class="success-title">Onek onek dhonnobad!</p>
+    <p class="success-sub">Tumi genuinely best.<br>Ar kokhono erokom korbo na. Promise. &#x1F64F;</p>
+  </div>
+</div>
+
+<button class="btn btn-no" id="no-btn" onclick="handleNo()">Na</button>
+
+<script>
+  let noCount = 0;
+  const noBtn = document.getElementById('no-btn');
+  const placeholder = document.getElementById('no-placeholder');
+  const counter = document.getElementById('counter');
+  const pleaMsg = document.getElementById('plea-msg');
+
+  function positionNoBtn() {
+    const rect = placeholder.getBoundingClientRect();
+    noBtn.style.left = rect.left + 'px';
+    noBtn.style.top = rect.top + 'px';
+    noBtn.style.height = rect.height + 'px';
+  }
+
+  positionNoBtn();
+  window.addEventListener('resize', positionNoBtn);
+
+  function moveNoBtn() {
+    const margin = 20;
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    const maxX = window.innerWidth - btnW - margin;
+    const maxY = window.innerHeight - btnH - margin;
+
+    const placeholderRect = placeholder.getBoundingClientRect();
+    let x, y, tries = 0;
+
+    do {
+      x = margin + Math.random() * (maxX - margin);
+      y = margin + Math.random() * (maxY - margin);
+      tries++;
+    } while (tries < 40 && (
+      Math.abs(x - placeholderRect.left) < 180 &&
+      Math.abs(y - placeholderRect.top) < 80
+    ));
+
+    noBtn.style.transition = 'none';
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
+  }
+
+  noBtn.addEventListener('mouseover', () => {
+    moveNoBtn();
+  });
+
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    handleNo();
+  }, { passive: false });
+
+  function handleNo() {
+    noCount++;
+    moveNoBtn();
+
+    if (noCount >= 10) {
+      pleaMsg.style.display = 'block';
+      counter.textContent = 'Tumi ' + noCount + ' bar "na" boleche... please khoma kore dao';
+    } else if (noCount >= 5) {
+      counter.textContent = 'Tumi ' + noCount + ' bar "na" boleche...';
+    } else if (noCount >= 2) {
+      counter.textContent = noCount + ' bar "na" boleche...';
+    }
+  }
+
+  function handleYes() {
+    document.getElementById('main-content').style.display = 'none';
+    noBtn.style.display = 'none';
+    const s = document.getElementById('success-card');
+    s.style.display = 'flex';
+  }
+</script>
+</body>
+</html>
